@@ -1,7 +1,7 @@
 Conventional image restoration models require large datasets of clean/degraded image pairs, which are expensive and often infeasible to collect in real-world settings. This project proposes a self-supervised alternative that learns entirely from unpaired, unlabeled degraded images by combining a Vision Transformer encoder with a diffusion-based denoiser trained via masked patch noise estimation.
 
-Architecture
-  Degraded Image x₀
+Architecture:
+Degraded Image x₀
          │
     ┌────▼────────────┐
     │   ViT Encoder   │   patch tokenization + positional embeddings
