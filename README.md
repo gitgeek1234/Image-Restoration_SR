@@ -27,4 +27,16 @@ Features:
 6. FP16 mixed precision, gradient checkpointing, and EMA weight averaging
 7. Modular design — swap backbone, schedule, or sampler independently
 
-   
+How It Works:
+Self-Supervised Objective
+Given a degraded image x₀, a timestep t is sampled and noise is added to produce x_t. A random 75% of patches are then masked. The Transformer denoiser sees only unmasked patches and predicts the noise at masked locations:
+L = E_{t, ε, mask} [ || ε − ε_θ(x_t, t, visible_patches) ||₁ ]
+This blind-spot design forces the model to learn generalizable structure rather than memorizing pixel values.
+
+Diffusion Process:
+Forward: q(x_t | x₀) = N(√ᾱ_t · x₀, (1 − ᾱ_t) · I) with cosine schedule
+Reverse (DDPM): iterative ancestral sampling from x_T to x₀
+Reverse (DDIM): deterministic non-Markovian shortcut — same model weights, 50× fewer steps
+
+Inference Strategy:
+At test time the reverse chain is initialized from a partially-noised version of the degraded image at timestep T_start < T rather than from pure Gaussian noise. This preserves structural content from the input while allowing the model to remove degradation artifacts.
